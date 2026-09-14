@@ -15,62 +15,6 @@
     activeButton = null;
   }
 
-  // Keep vertical swipes available for normal page scrolling. Only an
-  // intentional horizontal drag controls the wide comparison table.
-  document.querySelectorAll(".table-scroll").forEach((scroller) => {
-    let startX = 0;
-    let startY = 0;
-    let startScrollLeft = 0;
-    let direction = null;
-    let dragged = false;
-
-    scroller.addEventListener("pointerdown", (event) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
-      startX = event.clientX;
-      startY = event.clientY;
-      startScrollLeft = scroller.scrollLeft;
-      direction = null;
-      dragged = false;
-    });
-
-    scroller.addEventListener("pointermove", (event) => {
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-
-      if (!direction && Math.max(Math.abs(dx), Math.abs(dy)) > 7) {
-        direction = Math.abs(dx) > Math.abs(dy) ? "horizontal" : "vertical";
-        if (direction === "horizontal") {
-          scroller.setPointerCapture?.(event.pointerId);
-          scroller.classList.add("is-dragging");
-        }
-      }
-
-      if (direction === "horizontal") {
-        dragged = true;
-        scroller.scrollLeft = startScrollLeft - dx;
-        event.preventDefault();
-      }
-    });
-
-    const finishDrag = (event) => {
-      if (scroller.hasPointerCapture?.(event.pointerId)) {
-        scroller.releasePointerCapture(event.pointerId);
-      }
-      scroller.classList.remove("is-dragging");
-      direction = null;
-    };
-
-    scroller.addEventListener("pointerup", finishDrag);
-    scroller.addEventListener("pointercancel", finishDrag);
-
-    scroller.addEventListener("click", (event) => {
-      if (!dragged) return;
-      event.preventDefault();
-      event.stopPropagation();
-      dragged = false;
-    }, true);
-  });
-
   players.forEach((button) => {
     const audio = new Audio();
     audio.preload = "none";

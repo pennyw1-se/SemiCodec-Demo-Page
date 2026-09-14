@@ -334,17 +334,12 @@ h2 {
 
 .table-scroll {
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  max-height: min(72vh, 760px);
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pinch-zoom;
-  overscroll-behavior-x: contain;
-  cursor: grab;
-}
-
-.table-scroll.is-dragging {
-  cursor: grabbing;
-  user-select: none;
+  touch-action: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .audio-table {
@@ -366,7 +361,7 @@ h2 {
 
 .audio-table thead th {
   position: sticky;
-  top: 61px;
+  top: 0;
   z-index: 9;
   color: #4b5663;
   background: #f3f1ec;
