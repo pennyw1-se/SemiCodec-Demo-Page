@@ -3,7 +3,7 @@
 Static demo website for the SemiCodec paper, published at:
 
 ```text
-https://lo0p3r.github.io/SemiCodec-Demo-Page/
+https://pennyw1-se.github.io/SemiCodec-Demo-Page/
 ```
 
 ## Preview locally
