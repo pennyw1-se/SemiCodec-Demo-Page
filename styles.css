@@ -335,10 +335,16 @@ h2 {
 .table-scroll {
   width: 100%;
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
+  touch-action: pan-y pinch-zoom;
   overscroll-behavior-x: contain;
+  cursor: grab;
+}
+
+.table-scroll.is-dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .audio-table {
