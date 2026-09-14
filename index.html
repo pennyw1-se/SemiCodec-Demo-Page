@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Audio demonstrations for SemiCodec, a semi-discrete neural speech codec with synchronized discrete tokens and continuous latents.">
+  <meta name="theme-color" content="#f5f3ee">
+  <title>SemiCodec — Audio Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="wordmark" href="#top">SemiCodec</a>
+      <div class="nav-links">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#audio">Audio samples</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <p class="eyebrow">ICASSP 2027 submission · Audio demo</p>
+      <h1>SemiCodec</h1>
+      <p class="subtitle">Bridging Semantic Tokenization and High-Fidelity Reconstruction with Semi-Discrete Speech
+        Representations</p>
+      <p class="authors">Kecan Mao<sup>1*</sup> · Nan Xu<sup>2</sup> · Zhaoyang Meng<sup>1</sup> · Zhengyao
+        Ma<sup>1</sup> · Yingming Gao<sup>1</sup> · Yi Zhao<sup>2†</sup> · Ya Li<sup>1†</sup></p>
+      <p class="affiliations"><sup>1</sup>Beijing University of Posts and Telecommunications &nbsp;·&nbsp;
+        <sup>2</sup>WeChat, Tencent Inc.</p>
+      <div class="hero-actions">
+        <a class="button" href="#audio">Listen to samples</a>
+        <a class="button secondary" href="#method">View method</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="abstract">
+      <div class="section-head"><span class="section-kicker">Overview</span>
+        <h2>Abstract</h2>
+      </div>
+      <div class="abstract-card">
+        <p>Unified speech generation models require representations that support language modeling while preserving high
+          waveform fidelity. Existing approaches rarely achieve both: discrete tokens ease modeling but lose
+          fine-grained acoustic information, while continuous latents preserve fidelity but require specialized
+          generative objectives. We introduce <strong>SemiCodec</strong>, a novel <strong>Semi</strong>-discrete neural
+          speech <strong>Codec</strong> with synchronized discrete tokens and continuous latents. Direct joint
+          optimization may create a reconstruction shortcut through the continuous pathway, leaving the discrete tokens
+          insufficiently grounded. To address this issue, we propose a <span
+            class="highlight"><strong>“Preserve-then-Ground”</strong></span> training strategy that first establishes a
+          high-fidelity synthesis space and then grounds semantic tokens within it. Experiments show that SemiCodec
+          outperforms fully discrete codecs in reconstruction quality and intelligibility while remaining competitive
+          with continuous representations in acoustic fidelity and speaker preservation.</p>
+      </div>
+    </section>
+
+    <section class="section" id="method">
+      <div class="section-head">
+        <span class="section-kicker">Semi-discrete representation</span>
+        <h2>One codec, two synchronized views of speech</h2>
+        <p>Discrete semantic tokens provide a compact interface for language modeling, while continuous acoustic latents
+          preserve speaker identity, prosody, and fine waveform detail.</p>
+      </div>
+      <div class="figure-grid">
+        <figure class="figure-card">
+          <div class="figure-wrap"><img src="assets/images/model_architecture.png"
+              alt="SemiCodec architecture with synchronized continuous and discrete branches"></div>
+          <figcaption><b>Model architecture</b>The two branches are decoded into a shared synthesis space, fused by
+            addition, and converted back to waveform samples.</figcaption>
+        </figure>
+        <figure class="figure-card">
+          <div class="figure-wrap"><img src="assets/images/training_strategy.png"
+              alt="Two-stage Preserve-then-Ground training strategy"></div>
+          <figcaption><b>Preserve-then-Ground training</b>We first learn a high-fidelity continuous synthesis space,
+            then freeze it and ground the discrete branch using reconstruction and self-supervised semantic guidance.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="key-ideas-title">
+      <div class="section-head"><span class="section-kicker">Design</span>
+        <h2 id="key-ideas-title">Key ideas</h2>
+      </div>
+      <div class="takeaways">
+        <article class="takeaway">
+          <div class="number">01</div>
+          <h3>Discrete tokens</h3>
+          <p>A 25-Hz discrete stream with a 4,096-entry codebook offers a compact, language-model-friendly
+            representation.</p>
+        </article>
+        <article class="takeaway">
+          <div class="number">02</div>
+          <h3>Continuous latents</h3>
+          <p>A synchronized 64-dimensional continuous stream retains information that is difficult to express through a
+            single codebook.</p>
+        </article>
+        <article class="takeaway">
+          <div class="number">03</div>
+          <h3>Staged training</h3>
+          <p>The training schedule prevents the continuous path from becoming a reconstruction shortcut that leaves
+            semantic tokens underused.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="audio">
+      <div class="section-head">
+        <span class="section-kicker">Reconstruction comparison</span>
+        <h2>Audio samples</h2>
+      </div>
+      <div class="audio-card">
+        <div class="audio-note"><span class="legend-dot" aria-hidden="true"></span>
+          <div><b>Listening tip:</b> use headphones and keep the playback volume fixed. Starting a new sample
+            automatically pauses the previous one. The table scrolls horizontally on smaller screens.</div>
+        </div>
+        <div class="table-scroll" role="region" aria-label="Audio comparison table" tabindex="0">
+          <table class="audio-table">
+            <thead>
+              <tr>
+                <th>Utterance</th>
+                <th>Reference<br><small>Original</small></th>
+                <th class="method-semi">SemiCodec<br><small>Proposed</small></th>
+                <th>Semantic-VAE<br><small>Continuous</small></th>
+                <th>Ming-omni-tts VAE<br><small>Continuous</small></th>
+                <th>dots.tts VAE<br><small>Continuous</small></th>
+                <th>WavTokenizer<br><small>40 Hz</small></th>
+                <th>WavTokenizer<br><small>75 Hz</small></th>
+                <th>X-Codec 2.0</th>
+                <th>SAC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang ">EN</span> Sample 1</div>
+                  <div class="transcript" lang="en">The water of the rivulet was dark with endless drift and mirrored
+                    the high drifting clouds.</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_01/reference.wav"
+                    data-label="Reference for item_01" aria-label="Play Reference for item_01">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_01/semicodec.wav" data-label="SemiCodec for item_01"
+                    aria-label="Play SemiCodec for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_01/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_01" aria-label="Play Semantic-VAE for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_01/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_01"
+                    aria-label="Play Ming-omni-tts VAE for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_01/dots_audiovae.wav" data-label="dots.tts VAE for item_01"
+                    aria-label="Play dots.tts VAE for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_01/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_01"
+                    aria-label="Play WavTokenizer 40 Hz for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_01/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_01"
+                    aria-label="Play WavTokenizer 75 Hz for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_01/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_01" aria-label="Play X-Codec 2.0 for item_01">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_01/sac.wav"
+                    data-label="SAC for item_01" aria-label="Play SAC for item_01">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang ">EN</span> Sample 2</div>
+                  <div class="transcript" lang="en">Yet the deep marks of conical teeth upon the iron pick are certainly
+                    those of the crocodile.</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_02/reference.wav"
+                    data-label="Reference for item_02" aria-label="Play Reference for item_02">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_02/semicodec.wav" data-label="SemiCodec for item_02"
+                    aria-label="Play SemiCodec for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_02/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_02" aria-label="Play Semantic-VAE for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_02/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_02"
+                    aria-label="Play Ming-omni-tts VAE for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_02/dots_audiovae.wav" data-label="dots.tts VAE for item_02"
+                    aria-label="Play dots.tts VAE for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_02/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_02"
+                    aria-label="Play WavTokenizer 40 Hz for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_02/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_02"
+                    aria-label="Play WavTokenizer 75 Hz for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_02/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_02" aria-label="Play X-Codec 2.0 for item_02">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_02/sac.wav"
+                    data-label="SAC for item_02" aria-label="Play SAC for item_02">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang ">EN</span> Sample 3</div>
+                  <div class="transcript" lang="en">In this way the whole status of images as &quot;copies&quot; is
+                    bound up with the analysis of memory.</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_03/reference.wav"
+                    data-label="Reference for item_03" aria-label="Play Reference for item_03">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_03/semicodec.wav" data-label="SemiCodec for item_03"
+                    aria-label="Play SemiCodec for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_03/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_03" aria-label="Play Semantic-VAE for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_03/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_03"
+                    aria-label="Play Ming-omni-tts VAE for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_03/dots_audiovae.wav" data-label="dots.tts VAE for item_03"
+                    aria-label="Play dots.tts VAE for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_03/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_03"
+                    aria-label="Play WavTokenizer 40 Hz for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_03/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_03"
+                    aria-label="Play WavTokenizer 75 Hz for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_03/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_03" aria-label="Play X-Codec 2.0 for item_03">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_03/sac.wav"
+                    data-label="SAC for item_03" aria-label="Play SAC for item_03">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang ">EN</span> Sample 4</div>
+                  <div class="transcript" lang="en">These two cherubic infants had both big brown eyes, fat red cheeks,
+                    and adorable, fluffy golden curls.</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_04/reference.wav"
+                    data-label="Reference for item_04" aria-label="Play Reference for item_04">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_04/semicodec.wav" data-label="SemiCodec for item_04"
+                    aria-label="Play SemiCodec for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_04/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_04" aria-label="Play Semantic-VAE for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_04/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_04"
+                    aria-label="Play Ming-omni-tts VAE for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_04/dots_audiovae.wav" data-label="dots.tts VAE for item_04"
+                    aria-label="Play dots.tts VAE for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_04/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_04"
+                    aria-label="Play WavTokenizer 40 Hz for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_04/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_04"
+                    aria-label="Play WavTokenizer 75 Hz for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_04/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_04" aria-label="Play X-Codec 2.0 for item_04">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_04/sac.wav"
+                    data-label="SAC for item_04" aria-label="Play SAC for item_04">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang zh">ZH</span> Sample 5</div>
+                  <div class="transcript" lang="zh">而收入也提升了三点零二倍，产能和收入的增速基本上是一致的。</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_05/reference.wav"
+                    data-label="Reference for item_05" aria-label="Play Reference for item_05">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_05/semicodec.wav" data-label="SemiCodec for item_05"
+                    aria-label="Play SemiCodec for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_05/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_05" aria-label="Play Semantic-VAE for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_05/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_05"
+                    aria-label="Play Ming-omni-tts VAE for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_05/dots_audiovae.wav" data-label="dots.tts VAE for item_05"
+                    aria-label="Play dots.tts VAE for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_05/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_05"
+                    aria-label="Play WavTokenizer 40 Hz for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_05/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_05"
+                    aria-label="Play WavTokenizer 75 Hz for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_05/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_05" aria-label="Play X-Codec 2.0 for item_05">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_05/sac.wav"
+                    data-label="SAC for item_05" aria-label="Play SAC for item_05">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang zh">ZH</span> Sample 6</div>
+                  <div class="transcript" lang="zh">从过去到现在这种理论啊一直是各国制定经贸政策的重要依据。</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_06/reference.wav"
+                    data-label="Reference for item_06" aria-label="Play Reference for item_06">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_06/semicodec.wav" data-label="SemiCodec for item_06"
+                    aria-label="Play SemiCodec for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_06/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_06" aria-label="Play Semantic-VAE for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_06/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_06"
+                    aria-label="Play Ming-omni-tts VAE for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_06/dots_audiovae.wav" data-label="dots.tts VAE for item_06"
+                    aria-label="Play dots.tts VAE for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_06/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_06"
+                    aria-label="Play WavTokenizer 40 Hz for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_06/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_06"
+                    aria-label="Play WavTokenizer 75 Hz for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_06/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_06" aria-label="Play X-Codec 2.0 for item_06">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_06/sac.wav"
+                    data-label="SAC for item_06" aria-label="Play SAC for item_06">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang zh">ZH</span> Sample 7</div>
+                  <div class="transcript" lang="zh">这样的孩子呢有一定的可能，就是在他还没有成熟的时候，别人给一点温暖就跑了。</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_07/reference.wav"
+                    data-label="Reference for item_07" aria-label="Play Reference for item_07">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_07/semicodec.wav" data-label="SemiCodec for item_07"
+                    aria-label="Play SemiCodec for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_07/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_07" aria-label="Play Semantic-VAE for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_07/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_07"
+                    aria-label="Play Ming-omni-tts VAE for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_07/dots_audiovae.wav" data-label="dots.tts VAE for item_07"
+                    aria-label="Play dots.tts VAE for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_07/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_07"
+                    aria-label="Play WavTokenizer 40 Hz for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_07/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_07"
+                    aria-label="Play WavTokenizer 75 Hz for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_07/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_07" aria-label="Play X-Codec 2.0 for item_07">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_07/sac.wav"
+                    data-label="SAC for item_07" aria-label="Play SAC for item_07">Play</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="sample-id"><span class="lang zh">ZH</span> Sample 8</div>
+                  <div class="transcript" lang="zh">如果银行觉得政府补贴的不够，他就会决定直接进行止赎和拍卖。</div>
+                </td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_08/reference.wav"
+                    data-label="Reference for item_08" aria-label="Play Reference for item_08">Play</button></td>
+                <td class="method-semi"><button class="audio-button" type="button"
+                    data-src="assets/audio/item_08/semicodec.wav" data-label="SemiCodec for item_08"
+                    aria-label="Play SemiCodec for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_08/semantic_vae.wav"
+                    data-label="Semantic-VAE for item_08" aria-label="Play Semantic-VAE for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_08/ming_audiovae.wav" data-label="Ming-omni-tts VAE for item_08"
+                    aria-label="Play Ming-omni-tts VAE for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_08/dots_audiovae.wav" data-label="dots.tts VAE for item_08"
+                    aria-label="Play dots.tts VAE for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_08/wavtokenizer_40.wav" data-label="WavTokenizer 40 Hz for item_08"
+                    aria-label="Play WavTokenizer 40 Hz for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button"
+                    data-src="assets/audio/item_08/wavtokenizer_75.wav" data-label="WavTokenizer 75 Hz for item_08"
+                    aria-label="Play WavTokenizer 75 Hz for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_08/xcodec2.wav"
+                    data-label="X-Codec 2.0 for item_08" aria-label="Play X-Codec 2.0 for item_08">Play</button></td>
+                <td class=""><button class="audio-button" type="button" data-src="assets/audio/item_08/sac.wav"
+                    data-label="SAC for item_08" aria-label="Play SAC for item_08">Play</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>SemiCodec</strong> · Audio samples are provided for research demonstration.<br>
+    * Work performed during the internship at Tencent. † Corresponding authors.
+  </footer>
+  <script src="app.js"></script>
+</body>
+
+</html>
