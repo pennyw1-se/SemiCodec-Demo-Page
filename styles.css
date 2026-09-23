@@ -584,12 +584,13 @@ footer {
 .method-main-figure .figure-wrap {
   min-height: 0;
   padding: 0;
+  overflow: hidden;
   background: #fff;
 }
 
 .method-main-figure .figure-wrap img {
   display: block;
   width: 100%;
+  height: auto;
   max-height: none;
-  object-fit: contain;
 }
