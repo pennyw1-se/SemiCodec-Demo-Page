@@ -579,3 +579,22 @@ footer {
     transition: none !important;
   }
 }
+
+/* Current paper overview figure */
+.method-main-figure .figure-wrap {
+  min-height: 0;
+  aspect-ratio: 542 / 408;
+}
+
+.method-main-figure .figure-wrap object {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 520px) {
+  .method-main-figure .figure-wrap {
+    padding: 6px;
+  }
+}
