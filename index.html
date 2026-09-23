@@ -54,7 +54,7 @@
           <strong>Codec</strong> with synchronized discrete tokens and continuous latents. Direct joint optimization may
           create a reconstruction shortcut through the continuous pathway, leaving the discrete tokens insufficiently
           grounded. To address this issue, we propose a <span
-            class="highlight"><strong>Preserve-then-Ground</strong></span> training paradigm that first establishes a
+            class="highlight"><strong>Preserve-then-Ground</strong></span> training strategy that first establishes a
           high-fidelity synthesis space and then grounds SSL-guided discrete tokens within it. Experiments show that
           SemiCodec outperforms fully discrete codecs in reconstruction quality and intelligibility while remaining
           competitive with continuous representations in acoustic fidelity and speaker preservation.
@@ -72,10 +72,8 @@
       <div class="figure-grid">
         <figure class="figure-card method-main-figure">
           <div class="figure-wrap">
-            <object data="assets/images/model_arch_new.pdf#view=FitH&amp;toolbar=0&amp;navpanes=0"
-              type="application/pdf" aria-label="SemiCodec architecture and Preserve-then-Ground training paradigm">
-              <a href="assets/images/model_arch_new.pdf">Open the SemiCodec method figure as a PDF.</a>
-            </object>
+            <img src="assets/images/model_arch_new.png"
+              alt="SemiCodec architecture and Preserve-then-Ground training paradigm">
           </div>
           <figcaption><b>Model architecture and Preserve-then-Ground training</b>SemiCodec encodes speech into
             synchronized SSL-guided discrete tokens and continuous acoustic latents, maps both branches into a shared
@@ -107,7 +105,7 @@
         <article class="takeaway">
           <div class="number">03</div>
           <h3>Staged training</h3>
-          <p>The training paradigm prevents the continuous path from becoming a reconstruction shortcut that leaves
+          <p>The training schedule prevents the continuous path from becoming a reconstruction shortcut that leaves
             discrete tokens underused.</p>
         </article>
       </div>
